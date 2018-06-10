@@ -34,13 +34,13 @@ $("document").ready(function () {
     initUiHandlers();
     // return;
     cwic.SystemController.addEventHandler('onInitialized', onCwicInitialized);
-    cwic.SystemController.addEventHandler('onInitializationError', displayError);
+    cwic.SystemController.addEventHandler('onInitializationError', onInitializationError);
     cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
     cwic.SystemController.addEventHandler('onUserAuthorizationRejected', onUserAuthorizationRejected);
     cwic.SystemController.addEventHandler('onAddonConnectionLost', () => {
         alert('Add-On Connection Lost')
     });
-
+    cwic.CertificateController.addEventHandler("onInvalidCertificate", onInvalidCertificate);
     // Calling API to initialize cwic library.
     cwic.SystemController.initialize();
 })
@@ -51,7 +51,12 @@ function initUiHandlers() {
     $("#destination").keypress(destinationKeypress);
 }
 
-function displayError(error) {
+function onInvalidCertificate(invalidCertificate) {
+    alert("Error: CUCM certificate invalid (please accept)");
+    cwic.CertificateController.acceptInvalidCertificate(invalidCertificate); // testing only
+}
+
+function onInitializationError(error) {
     alert('Error: ' + error.errorData.reason)
 }
 
@@ -73,13 +78,11 @@ function onUserAuthorizationRejected(){
 }
 
 function onCredentialsRequired() {
+    if (loginFailed) return;
     cwic.LoginController.setCUCMServers(cucm);
     cwic.LoginController.setCTIServers(cucm);
     cwic.LoginController.setTFTPServers(cucm);
-
-    if (!loginFailed) {
-        cwic.LoginController.setCredentials(username, password)
-    }
+    cwic.LoginController.setCredentials(username, password)
 }
 
 function onAuthenticationStateChanged(state) {
@@ -96,6 +99,7 @@ function onAuthenticationStateChanged(state) {
                     $("#authenticated-checkbox").prop("checked", true);
                 }
             }
+            break;
         case "NotAuthenticated":
             break;
     }
