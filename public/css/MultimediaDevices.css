@@ -1,0 +1,53 @@
+div.MediaDeviceSelectionWindow {
+    border: black solid 1px;
+    width: 320px;
+    margin: 2px;
+    padding: 2px;
+}
+
+div.MediaDeviceSelectionWindow button {
+    float: right;
+}
+
+div.MediaDeviceSelectionWindow select {
+    width: 62%;
+    float: right;
+    height: 20px;
+}
+
+div.MediaDeviceSelectionWindow input {
+    margin: 0 0 0 4px;
+    height: 20px;
+}
+
+div.MediaDeviceSelectionWindow label {
+    width: 36%;
+    text-align: right;
+    display: inline-block;
+    height: 22px;
+}
+
+div.MediaDeviceSelectionWindow .Title {
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+div.MediaDeviceSelectionWindow .Body {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+div.MediaDeviceSelectionWindow .Footer {
+    height: 30px;
+}
+
+div.MediaDeviceSelectionWindow .Footer button {
+    height: 25px;
+    width: 165px;
+}

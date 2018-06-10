@@ -1,0 +1,128 @@
+div.SignInWindow{
+    width: 300px;
+    /*margin: 2px;*/
+    padding: 2px;
+    border: 1px solid black;
+}
+
+div.SignInWindow .Title{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+div.SignOutWindow{
+    display: none;
+    width: 300px;
+    margin-bottom: 10px;
+    padding: 2px;
+    border: 1px solid black;
+}
+
+div.SignOutWindow .Title{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+
+div.SignInWindow input,
+div.SignInWindow label,
+div.SignInWindow select {
+    margin: 2px 0 0 5px !important;
+}
+
+div.SignInWindow label {
+    width: 100px;
+}
+
+/*#mansignindetails {*/
+    /*width: 300px;*/
+    /*border: 1px solid black;*/
+/*}*/
+
+#mansignindetails label {
+    width: 30%;
+    text-align: right;
+    display: inline-block;
+}
+
+#mansignindetails input,
+#mansignindetails select {
+    margin: 2px 0 0 0;
+}
+
+#mansignindetails input[type="text"],
+#mansignindetails input[type="password"] {
+    width: 55%;
+    padding-left: 4px;
+}
+
+#mansignindetails h3 {
+    margin: 5px;
+}
+
+#aboutcontainer {
+    font-size: 10px;
+    text-align: right;
+    border: 1px solid black;
+    margin: 2px;
+    padding: 2px;
+}
+
+#sdstart,
+#emailRequiredWindow,
+#credentialsRequiredWindow,
+#sdssosigninfailed,
+#devicedetails,
+#sdssoinprogress,
+#mansignindetails,
+/*#signout,*/
+#sdsignedin {
+    width: 300px;
+    border: 1px solid black;
+    display: none;
+}
+
+#sdstart *,
+#emailRequiredWindow *,
+#credentialsRequiredWindow *,
+#sdssosigninfailed *,
+/*#signout *,*/
+#devicedetails *,
+#sdssoinprogress *,
+#sdsignedin * {
+    margin: 5px;
+}
+
+
+#signoutbtn {
+    padding: 0;
+    margin-right: 0;
+    /*margin-left: 236px;*/
+}
+
+.manualsignin,
+.showinitialiew,
+.cancelsso,
+.reset {
+    color: blue;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#signinbtn {
+    margin-left: 5px;
+    margin-top: 5px;
+}

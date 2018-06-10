@@ -1,0 +1,311 @@
+div.CallWindow {
+
+    float: left;
+    /*width:500px;*/
+    /*height:500px;*/
+
+    margin: 2px;
+    display: none;
+    background-color: white;
+    border: 1px solid black;
+    vertical-align: top;
+}
+
+div.CallWindow .Title
+{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    border-bottom: 1px solid black;
+}
+
+div.CallWindow .Body {
+    /*height: 100%;*/
+    /*width: 100%;*/
+}
+
+
+div.CallWindow .Body .CallList{
+    width: 150px;
+    /*border-right: 1px solid black;*/
+    float: left;
+}
+
+div.CallWindow .Body .CallList .Title{
+    height: 30px;
+}
+
+div.CallWindow .Body .CallList .Body{
+    width: 150px;
+    /*background-color: red;*/
+}
+
+div.CallWindow .Body .CallInformation {
+    height: 30px;
+}
+
+div.CallWindow .Body .SelectedCall{
+    float: left;
+    border-left: 1px solid black;
+    /*border-right: 1px solid black;*/
+}
+
+
+div.CallWindow .VideoContainer {
+    position: relative;
+    min-height: 200px;
+    min-width: 420px;
+
+    width:420px;
+    height:200px;
+
+    background-color: black;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    resize: both;
+}
+
+div.CallWindow .VideoContainer .RemoteVideo {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    /*background-color: green;*/
+}
+
+div.CallWindow .VideoContainer .RemoteVideo .SelfviewVideo {
+    position: absolute;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    height: 25%;
+    /*background-color: yellow;*/
+}
+
+div.CallWindow .Controls{
+    /*padding: 10px;*/
+}
+
+div.CallWindow .Controls .CallControlStrip{
+    width: 100%;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div.CallWindow .Controls .CallControlStrip button {
+    width: 90px;
+    margin-bottom: 3px;
+}
+
+div.CallWindow .Controls .CallControlStrip input[type="text"]
+{
+    width: 122px;
+
+}
+
+div.CallWindow .Controls .CallControlStrip select
+{
+    width:186px;
+
+}
+
+div.CallWindow .Controls .CallControlStrip .ConversationControlsTitle{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+div.CallWindow div.callinfo {
+    height: 30px;
+}
+
+div.CallWindow .Controls .FarEndCameraControls{
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    /*height: 40px;*/
+    width:100%;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    /*padding: 10px;*/
+    /*display: inline-block;*/
+    text-align: center;
+    vertical-align: middle;
+}
+
+div.CallWindow .Controls .FarEndCameraControls .RemoteCameraTitle{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+div.CallWindow .Controls .FarEndCameraControls button {
+    width: 90px;
+}
+
+div.CallWindow .Controls .ExternalWindowControls {
+    /*border-bottom: 1px solid;*/
+    width:100%;
+
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    /*padding: 10px;*/
+    /*display: inline-block;*/
+    text-align: center;
+    vertical-align: middle;
+}
+
+div.CallWindow .Controls .ExternalWindowControls button {
+    width: 90px;
+}
+
+div.CallWindow .Controls .ExternalWindowControls .ExternalWindowControlsTitle{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+div.CallWindow .Body .IncomingCallList{
+    width: 150px;
+    /*border-left: 1px solid black;*/
+    float: right;
+    /*display: none;*/
+}
+
+div.CallWindow .Body .IncomingCallList .Title{
+    height: 30px;
+}
+
+div.CallWindow .Body .IncomingCallList .Body{
+    width: 150px;
+    /*background-color: red;*/
+}
+
+ul#incomingCallList
+{
+    width: 150px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+div.CallWindow .Body .IncomingCallList .ConversationID
+{
+    width: 150px;
+    height: 20px;
+    float: left;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 16px;
+
+}
+
+div.CallWindow .Body .IncomingCallList .Controls
+{
+    /*height: 20px;*/
+    width: 150px;
+    float:left;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+div.TopLeftPosition{
+    left: 20px;
+    top: 20px;
+    position: absolute;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    height: 25%;
+    /*background-color: yellow;*/
+}
+
+div.TopRightPosition{
+    right: 20px;
+    top: 20px;
+    position: absolute;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    height: 25%;
+    /*background-color: yellow;*/
+}
+
+div.BottomRightPosition{
+    right: 20px;
+    bottom: 20px;
+    position: absolute;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    height: 25%;
+    /*background-color: yellow;*/
+}
+
+div.BottomLeftPosition{
+    left: 20px;
+    bottom: 20px;
+    position: absolute;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    width: 25%;
+    height: 25%;
+    /*background-color: yellow;*/
+}
+
+#telephonyNumberForConversationText{
+    width:312px;
+    height:30px;
+    margin-left: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+div.StartConversation {
+    width: 100%;
+    /*border-bottom: 2px solid midnightblue;*/
+    /*margin-bottom: 20px;*/
+    /*margin-top: 20px;*/
+}
+
+#startAudioConversationButton{
+    height: 36px;
+}
+
+#startVideoConversationButton{
+    height: 36px;
+}
+

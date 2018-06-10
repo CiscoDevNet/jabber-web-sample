@@ -1,0 +1,59 @@
+div.devicedetails label {
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+}
+
+#devices {
+    width: 180px;
+}
+
+#devicedetails select#lines {
+    width: 80px;
+}
+
+#devicedetails div {
+    margin: 0;
+}
+
+#connectbtn {
+    margin-left: 98px;
+}
+
+#remotePhoneNumberTextField {
+    width: 176px;
+}
+
+div.SelectedDeviceInfo {
+    border: solid 1px black;
+    width: 100%;
+    display: none;
+    /*height: 50px;*/
+    /*display: table-cell;*/
+    /*text-align: center;*/
+    /*vertical-align: middle;*/
+}
+
+div.SelectedDeviceInfo .Item {
+    width: 300px;
+    height:25px;
+}
+
+div.SelectedDeviceInfo .Item label{
+    width:150px;
+    height: 100%;
+    text-align: right;
+}
+
+div.SelectedDeviceInfo .Item span{
+    width:150px;
+    height: 100%;
+}
+
+div#deviceselectioncontainer .label{
+    width: 35%;
+}
+
+div#deviceselectioncontainer .span{
+    width: 65%;
+}

@@ -1,0 +1,49 @@
+div.MonitorInformationWindow {
+    border: black solid 1px;
+    width: 320px;
+    margin: 2px;
+    padding: 2px;
+}
+
+div.MonitorInformationWindow .Title {
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    vertical-align: middle;
+
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+div.MonitorInformationWindow .Body {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+div.MonitorInformationWindow .Footer {
+    height: 30px;
+}
+
+div.MonitorInformationWindow .Footer input {
+    height: 25px;
+    width: 80px;
+    float: right;
+    margin-left: 5px;
+}
+
+ul#screenInformationList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+div#screenInformationListWindow .ScreenInfo {
+    width: 200px;
+    /*height: 20px;*/
+}
+
+div#screenInformationListWindow .Controls {
+    /*width: 100%;*/
+    text-align: center;
+}

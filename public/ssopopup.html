@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Untitled Document</title>
+</head>
+<body>
+
+<p>Parsing the token and sending to parent page...</p>
+
+<script>
+ 
+    var hash = document.location.hash;
+	var token = hash.split('&')[0].split('=')[1];
+	var parentProp = window.opener.testData;
+    var url = document.location.href;
+    
+	window.opener.onSSONavigationComplete({hash:hash, token:token, data:parentProp, url: url});
+    window.close();
+    
+</script>
+</body>
+</html>

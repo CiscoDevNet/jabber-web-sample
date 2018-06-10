@@ -1,0 +1,48 @@
+body {
+    font-size: 16px;
+}
+
+.ib {
+    display: inline-block;
+}
+
+
+div#callcontainer {
+    width: 300px;
+    height: 85px;
+    display: none;
+    background-color: #F0F8FF;
+    border: 1px solid #aaaaaa;
+}
+
+div#callcontainer div.remotename {
+    float: left;
+    width: 300px;
+    height: 30px;
+    background-color: #D3D3D3;
+}
+
+div#callcontainer button.endbtn {
+    float: right;
+}
+
+div#message {
+    font-size: 20px;
+    color: #0066CC;
+}
+
+.rvc {
+    min-height: 273px;
+    min-width: 364px;
+    overflow: hidden;
+    background-color: #c0c0c0;
+    resize: both;
+    padding: 5px;
+    border: 1px solid #808080;
+}
+
+div#remotevideocontainer object {
+    min-height: 273px;
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Cisco Jabber SDK Demo</title>
+
+	<link href="css/basic.css" rel="stylesheet" type="text/css" />
+	<script src="js/jquery-3.3.1.min.js"></script>
+	<script src="js/cwic-debug.js"></script>
+	<script src="js/basic.js"></script>
+</head>
+
+<body>
+	<div id="message">
+		<h1>Cisco Jabber Web SDK - Basic Sample App</h1>
+	</div>
+
+	<div>
+		<input type="checkbox" id="initialized-checkbox">CWIC extension initialized
+	</div>
+	<div>
+		<input type="checkbox" id="authorized-checkbox">Audio/Video authorized
+	</div>
+	<div>
+		<input type="checkbox" id="inprogress-checkbox">Authentication in progress
+	</div>
+	<div>
+		<input type="checkbox" id="authenticated-checkbox">Authenticated
+	</div>
+	<br>
+	<div>
+		<div class="ib">
+			Selected device:
+			<input id="selected-device" disabled/>
+		</div>
+		<span id="connection-status" style="color:red">Disconnected</span>
+	</div>
+	<br>
+	<div>
+		<div class="ib">
+			Directory Number:
+			<input id="directory-number" disabled/>
+		</div>
+	</div>
+
+	<br>
+	<label for="numtodial">Number to dial:</label>
+	<input type="text" id="destination"/>
+
+	<button type="button" id="make-call" disabled>Make Call</button>
+	<button type="button" id="end-call" disabled>End Call</button>
+	<br>
+	<br>
+	<div id="remote-video-container" class="rvc" ></div>
+</body>
+
+</html>
