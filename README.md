@@ -29,7 +29,7 @@ This is a [Visual Studio Code](https://code.visualstudio.com/) based project (th
     > or from the command-line: 
     ```
     cd public
-    node ../node_modules/http-server/bin/http-server -o
+    node ../node_modules/http-server/bin/http-server -o -c-1 -p 3000
     ```
 
 4. Browse to `basic.html` or `sample.html`
