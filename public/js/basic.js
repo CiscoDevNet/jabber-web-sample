@@ -20,9 +20,8 @@ SOFTWARE.
 
 // Global system/user specific info - customize 
 var username = "CHANGEME"; // CUCM user
-var password = "CHANGE";
+var password = "CHANGEME";
 var cucm = ["CHANGEME"]; // CUCM ip/hostname
-
 
 var loginFailed = false;
 var ignoreFalseAuthenticated = true;
@@ -31,35 +30,13 @@ var currentConversation;
 var nativeConversationWindow;
 
 $("document").ready(function () {
-    initUiHandlers();
-    // return;
     cwic.SystemController.addEventHandler('onInitialized', onCwicInitialized);
     cwic.SystemController.addEventHandler('onInitializationError', onInitializationError);
-    cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
-    cwic.SystemController.addEventHandler('onUserAuthorizationRejected', onUserAuthorizationRejected);
     cwic.SystemController.addEventHandler('onAddonConnectionLost', () => {
         alert('Add-On Connection Lost')
     });
-    cwic.CertificateController.addEventHandler("onInvalidCertificate", onInvalidCertificate);
-    // Calling API to initialize cwic library.
-    cwic.SystemController.initialize();
+    cwic.SystemController.initialize(); // Calling API to initialize cwic library
 })
-
-function initUiHandlers() {
-    $("#make-call").click(makeCallClick);
-    $("#end-call").click(endCallClick);
-    $("#destination").keypress(destinationKeypress);
-$("#start").click( startclick);
-}
-
-function startclick(){
-    cwic.LoginController.signIn()
-}
-
-function onInvalidCertificate(invalidCertificate) {
-    alert("Error: CUCM certificate invalid (please accept)");
-    cwic.CertificateController.acceptInvalidCertificate(invalidCertificate); // testing only
-}
 
 function onInitializationError(error) {
     alert('Error: ' + error.errorData.reason)
@@ -67,9 +44,14 @@ function onInitializationError(error) {
 
 function onCwicInitialized() {
     $('#initialized-checkbox').prop("checked", true);
+    cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
+    cwic.SystemController.addEventHandler('onUserAuthorizationRejected', function(){
+        alert('Error: Audio/Video user authorization failed');
+    });
 }
 
 function onUserAuthorized() {
+    cwic.CertificateController.addEventHandler("onInvalidCertificate", onInvalidCertificate);
     $('#authorized-checkbox').prop("checked", true);
     cwic.LoginController.addEventHandler("onCredentialsRequired", onCredentialsRequired);
     cwic.LoginController.addEventHandler('onAuthenticationStateChanged', onAuthenticationStateChanged);
@@ -78,8 +60,9 @@ function onUserAuthorized() {
     cwic.LoginController.signIn();
 }
 
-function onUserAuthorizationRejected(){
-    alert('Error: Audio/Video user authorization failed')
+function onInvalidCertificate(invalidCertificate) {
+    alert("Error: CUCM certificate invalid (please accept)");
+    cwic.CertificateController.acceptInvalidCertificate(invalidCertificate); // testing only
 }
 
 function onCredentialsRequired() {
@@ -105,6 +88,7 @@ function onAuthenticationStateChanged(state) {
                     break;
                 } else {
                     $("#authenticated-checkbox").prop("checked", true);
+                    initUiHandlers();
                 }
             }
             break;
@@ -118,6 +102,16 @@ function onAuthenticationFailed(error) {
     alert("Authentication Error: " + error);
 }
 
+function initUiHandlers() {
+    $("#make-call").click(makeCallClick);
+    $("#end-call").click(function(conversation){
+        if(currentConversation.capabilities.canEnd){
+            currentConversation.end();
+        }
+    });
+    $("#destination").keypress(destinationKeypress);
+}
+
 function onTelephonyDeviceListChanged() {
     let devices = cwic.TelephonyController.telephonyDevices;
     if (devices.length > 0) {
@@ -128,9 +122,9 @@ function onTelephonyDeviceListChanged() {
             $("#directory-number").val(device.lineDirectoryNumbers[0]);
         }
         cwic.TelephonyController.addEventHandler("onConnectionStateChanged", onConnectionStateChanged);
-        cwic.TelephonyController.addEventHandler("onConversationOutgoing", onConversationOutgoing);
-        cwic.TelephonyController.addEventHandler("onConversationStarted", onConversationStarted);
-        cwic.TelephonyController.addEventHandler("onConversationEnded", onConversationEnded);
+        cwic.TelephonyController.addEventHandler("onConversationOutgoing", function(conversation){
+            currentConversation = conversation;
+        });
         device.connect(true); // force registration
     }
 }
@@ -170,20 +164,12 @@ function onConnectionStateChanged(state) {
     }
 }
 
-function onConversationOutgoing(conversation){
-    currentConversation = conversation;
-}
-
 function makeCallClick() {
     $("#make-call").prop("disabled", true);
     $("#end-call").prop("disabled", false);
+    cwic.TelephonyController.addEventHandler("onConversationStarted", onConversationStarted);
+    cwic.TelephonyController.addEventHandler("onConversationEnded", onConversationEnded);
     cwic.TelephonyController.startVideoConversation($("#destination").val());
-}
-
-function endCallClick() {
-    if(currentConversation.capabilities.canEnd){
-        currentConversation.end();
-    }
 }
 
 function destinationKeypress(key){
@@ -206,5 +192,4 @@ function onConversationEnded(conversation){
     $("#end-call").prop("disabled", true);
     $("#make-call").prop("disabled", false);
     nativeConversationWindow.hide();
-    
 }
