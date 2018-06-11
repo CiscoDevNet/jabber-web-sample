@@ -19,9 +19,9 @@ SOFTWARE.
 */
 
 // Global system/user specific info - customize 
-var username = "dstaudt10"; // CUCM user
-var password = "cisco1234";
-var cucm = ["hq-cucm-pub.abc.inc"]; // CUCM ip/hostname
+var username = "CHANGEME"; // CUCM user
+var password = "CHANGE";
+var cucm = ["CHANGEME"]; // CUCM ip/hostname
 
 
 var loginFailed = false;
