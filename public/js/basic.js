@@ -19,9 +19,9 @@ SOFTWARE.
 */
 
 // Global system/user specific info - customize 
-var username = "CHANGEME"; // Jabber user: jid@domain.tld
-var password = "CHANGEME";
-var cucm = ["CHANGEME"]; // CUCM ip/hostname
+var username = "dstaudt10"; // CUCM user
+var password = "cisco1234";
+var cucm = ["hq-cucm-pub.abc.inc"]; // CUCM ip/hostname
 
 
 var loginFailed = false;
@@ -49,6 +49,11 @@ function initUiHandlers() {
     $("#make-call").click(makeCallClick);
     $("#end-call").click(endCallClick);
     $("#destination").keypress(destinationKeypress);
+$("#start").click( startclick);
+}
+
+function startclick(){
+    cwic.LoginController.signIn()
 }
 
 function onInvalidCertificate(invalidCertificate) {
@@ -78,7 +83,10 @@ function onUserAuthorizationRejected(){
 }
 
 function onCredentialsRequired() {
-    if (loginFailed) return;
+    if (loginFailed){
+        cwic.LoginController.signOut();
+        return;
+    }
     cwic.LoginController.setCUCMServers(cucm);
     cwic.LoginController.setCTIServers(cucm);
     cwic.LoginController.setTFTPServers(cucm);
@@ -106,8 +114,8 @@ function onAuthenticationStateChanged(state) {
 }
 
 function onAuthenticationFailed(error) {
-    alert("Authentication Error: " + error);
     loginFailed = true;
+    alert("Authentication Error: " + error);
 }
 
 function onTelephonyDeviceListChanged() {
@@ -197,4 +205,6 @@ function onConversationStarted(conversation){
 function onConversationEnded(conversation){
     $("#end-call").prop("disabled", true);
     $("#make-call").prop("disabled", false);
+    nativeConversationWindow.hide();
+    
 }
