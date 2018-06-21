@@ -38,15 +38,15 @@ $("document").ready(function () {
     cwic.SystemController.addEventHandler('onAddonConnectionLost', () => {
         alert('Add-On Connection Lost')
     });
+    cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
+    cwic.SystemController.addEventHandler('onUserAuthorizationRejected', function(){
+        alert('Error: Audio/Video user authorization failed');
+    });
     cwic.SystemController.initialize(); // Calling API to initialize cwic library
 })
 
 function onCwicInitialized() {
     $('#initialized-checkbox').prop("checked", true);
-    cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
-    cwic.SystemController.addEventHandler('onUserAuthorizationRejected', function(){
-        alert('Error: Audio/Video user authorization failed');
-    });
 }
 
 function onUserAuthorized() {
