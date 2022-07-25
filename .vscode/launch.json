@@ -8,7 +8,8 @@
             "name": "Launch Chrome",
             "request": "launch",
             "type": "chrome",
-            "url": "http://localhost:5500/public/basic.html",
+            "cwd": "${workspaceFolder}/public",
+            "url": "http://localhost:5500/basic.html",
             "webRoot": "${workspaceFolder}"
         },
 
@@ -19,10 +20,9 @@
             "program": "${workspaceFolder}/node_modules/http-server/bin/http-server",
             "cwd": "${workspaceFolder}/public",
             "args": [
-                "-o",
-                "-c-1",
-                "-p",
-                "3000"
+                "-c-1", // Disable caching
+                "--port",
+                "5500"
             ]
         }
     ]
