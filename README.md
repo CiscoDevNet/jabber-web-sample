@@ -1,11 +1,8 @@
 # jabber-web-sample
 
-Basic and advanced sample pages demonstrating the use of the [Cisco Jabber Web SDK](https://developer.cisco.com/site/jabber-websdk/overview/overview/) for voice and video.
+Basic sample page demonstrating the use of the [Cisco Jabber Web SDK](https://developer.cisco.com/site/jabber-websdk/overview/overview/) for voice and video.
 
 This is a [Visual Studio Code](https://code.visualstudio.com/) based project (though it can be run using any web server, all files are static.)
-
-* basic.html - show the basics of initialization through making a two-way video call
-* sample.html - the reference sample application from the official Cisco Jabber Web SDK (11.8.2)
 
 **Prerequisites**
 
@@ -15,6 +12,13 @@ This is a [Visual Studio Code](https://code.visualstudio.com/) based project (th
 * From the [Jabber SDK downloads](https://developer.cisco.com/site/jabber-websdk/develop-and-test/voice-and-video/downloads-and-docs/) page:
     * Jabber SDK Browser Add-On
     * Google Chrome or Mozilla Firefox Extension
+
+This project was developed using:
+
+* Google Chrome v103
+* Windows 10
+* CUCM 14
+* Jabber SDK 11.8.3
 
 ## Getting Started
 
@@ -32,7 +36,7 @@ This is a [Visual Studio Code](https://code.visualstudio.com/) based project (th
     node ../node_modules/http-server/bin/http-server -o -c-1 -p 3000
     ```
 
-4. Browse to `basic.html` or `sample.html`
+4. Browse to: `http://localhost:3000/basic.html`
 
 It's important to note that in order for sample application to work in chrome and firefox with their respective extensions
 sample application needs to be hosted. Communication between CiscoWebCommunicatorAddon and sample application is not
@@ -50,22 +54,4 @@ in 'examples' folder demonstrate specific or multiple features of the cwic libra
 For more information about the CWIC, go to the Cisco Developer Network at:
 https://developer.cisco.com/site/jabber-websdk/develop-and-test/voice-and-video/start-here/
 
-## Disclaimer
-
-Copyright (c) 2018 Cisco and/or its affiliates.
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 

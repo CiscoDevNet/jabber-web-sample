@@ -1,6 +1,5 @@
-
 /*
-Copyright (c) 2018 Cisco and/or its affiliates.
+Copyright (c) 2022 Cisco and/or its affiliates.
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -18,175 +17,241 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-// Global system/user specific info - customize 
+// CUCM Jabber user
+var username = "dstaudt";
+var password = "password";
+// CUCM hosts
+var cucmServers = [
+    'foo.foo.com',
+    'sjds-cucm14.cisco.com'
+];
 
-var username = "CHANGEME"; // CUCM user
-var password = "CHANGEME";
-var cucm = ["CHANGEME"]; // CUCM ip/hostname
+var currentServer = 0;
+var lastAuthError = 'None';
 
-var loginFailed = false;
-var ignoreFalseAuthenticated = true;
-
+var currentDevice;
 var currentConversation;
 var nativeConversationWindow;
 
-$("document").ready(function () {
+window.onload = function () {
+    // Handlers for plugin init success/failure/error
     cwic.SystemController.addEventHandler('onInitialized', onCwicInitialized);
     cwic.SystemController.addEventHandler('onInitializationError', function(error){
-        alert('Error: ' + error.errorData.reason);
+        alert('Initialization error: ' + error.errorData.reason);
     });
     cwic.SystemController.addEventHandler('onAddonConnectionLost', () => {
-        alert('Add-On Connection Lost')
+        alert('Add-On connection lost!')
     });
+    // Handlers for user accepting/rejecting mic/camera permission
     cwic.SystemController.addEventHandler('onUserAuthorized', onUserAuthorized);
     cwic.SystemController.addEventHandler('onUserAuthorizationRejected', function(){
-        alert('Error: Audio/Video user authorization failed');
+        alert('Audio/Video user authorization rejected!');
     });
-    cwic.SystemController.initialize(); // Calling API to initialize cwic library
-})
-
-function onCwicInitialized() {
-    $('#initialized-checkbox').prop("checked", true);
+    // Init the plugin/library
+    cwic.SystemController.initialize();
 }
 
+function onCwicInitialized() {
+    document.getElementById('initialized-checkbox').checked = true;
+}
+
+// If plugin initialized and user has authorized mic/camera, set up login/telephony/call
+// handlers and start the login/signin process
 function onUserAuthorized() {
+    document.getElementById('authorized-checkbox').checked = true;
     cwic.CertificateController.addEventHandler("onInvalidCertificate", onInvalidCertificate);
-    $('#authorized-checkbox').prop("checked", true);
     cwic.LoginController.addEventHandler("onCredentialsRequired", onCredentialsRequired);
+    cwic.LoginController.addEventHandler("onSignedOut", onSignedOut);
+    cwic.LoginController.addEventHandler("onSigningIn", onSigningIn);
     cwic.LoginController.addEventHandler('onAuthenticationStateChanged', onAuthenticationStateChanged);
-    cwic.LoginController.addEventHandler("onAuthenticationFailed", function(error){
-        loginFailed = true;
-        alert("Authentication Error: " + error);
-    });
+    cwic.LoginController.addEventHandler("onAuthenticationFailed", onAuthenticationFailed);
     cwic.TelephonyController.addEventHandler('onTelephonyDeviceListChanged', onTelephonyDeviceListChanged);
+    cwic.TelephonyController.addEventHandler('onConnectionStateChanged', onConnectionStateChanged);
+    cwic.TelephonyController.addEventHandler("onConversationOutgoing", onConversationOutgoing);
+    cwic.TelephonyController.addEventHandler("onConversationStarted", onConversationStarted);
+    cwic.TelephonyController.addEventHandler("onConversationEnded", onConversationEnded);
+    cwic.LoginController.setCUCMServers([cucmServers[currentServer]]);
+    cwic.LoginController.setTFTPServers([cucmServers[currentServer]]);
     cwic.LoginController.signIn();
 }
 
+// If the add-on can not verify the CUCM UDS SSL certificiate, prompt the user to accept it
 function onInvalidCertificate(invalidCertificate) {
-    alert("Error: CUCM certificate invalid (please accept)");
-    cwic.CertificateController.acceptInvalidCertificate(invalidCertificate); // testing only
-}
-
-function onCredentialsRequired() {
-    if (loginFailed){
-        cwic.LoginController.signOut();
-        return;
+    if (confirm('Authentication error: CUCM SSL certificate invalid (please accept)')) {
+        cwic.CertificateController.acceptInvalidCertificate(invalidCertificate);
     }
-    cwic.LoginController.setCUCMServers(cucm);
-    cwic.LoginController.setCTIServers(cucm);
-    cwic.LoginController.setTFTPServers(cucm);
-    cwic.LoginController.setCredentials(username, password)
 }
 
+function onSigningIn() {
+    document.getElementById('signingin-checkbox').checked = true;
+    document.getElementById('signingin-server').innerText = `(${cucmServers[currentServer]})...`;
+}
+
+function onSignedOut() {
+    document.getElementById('signingin-checkbox').checked = false;
+    document.getElementById('signingin-server').innerText = '';
+    document.getElementById("inprogress-checkbox").checked = false;
+    document.getElementById("authenticated-checkbox").checked = false;
+}
+
+// Plugin is requesting user credentials and/or CUCM server address
+function onCredentialsRequired(content) {
+    switch( lastAuthError ) {
+        case 'None':
+            document.getElementById('signingin-checkbox').checked = true;
+            document.getElementById('signingin-server').innerText = `(${cucmServers[currentServer]})...`;
+            cwic.LoginController.setCUCMServers([cucmServers[currentServer]]);
+            cwic.LoginController.setTFTPServers([cucmServers[currentServer]]);
+            cwic.LoginController.setCredentials(username, password);
+            break;
+        // If previous sign-in attempt resulted in a connection error, reset the sign-in process
+        // Note: don't setCredentials or the previous invalid/failed credentials/server will be retried
+        // resetUserData will result in a new onCredentialsRequired event
+        case  'Connection':
+            cwic.LoginController.resetUserData();
+            lastAuthError = 'None';
+            break;
+        case 'Credentials':
+            // Do nothing - i.e. halt the login process
+            break;
+    }
+}
+
+// Sign-in authentication failed for some reason
+// Note, this is always followed by an onCredentialsRequired call to prompt a retry
+function onAuthenticationFailed(error) {
+    switch (error) {
+        case 'CouldNotConnect':
+        case 'ClientCertificateError':
+        case 'SSLConnectError':
+            alert(`Authentication error!  Could not connect to: ${cucmServers[currentServer]}`);
+            // Round robin to the next CUCM server to try
+            currentServer = (currentServer == cucmServers.length-1) ? 0 : ++currentServer;
+            // Set lastAuthError so that onCredentialsRequired knows to reset the user/server data
+            lastAuthError = 'Connection';
+            break;
+        case 'InvalidCredentials':
+        case 'InvalidToken':
+            alert('Authentication error!  Invalid credentials');
+            lastAuthError = 'Credentials';
+        break;
+        case 'NoCredentialsConfigured':
+            lastAuthError = 'None';
+            break;
+        default:
+            alert(`Authentication error! Message: ${error}`);
+            break;
+        }
+        }
+    
 function onAuthenticationStateChanged(state) {
     switch (state) {
         case "InProgress":
-            $("#inprogress-checkbox").prop("checked", true);
+            document.getElementById("inprogress-checkbox").checked = true;
+            document.getElementById("authenticated-checkbox").checked = false;
             break;
         case "Authenticated":
-            {
-                if (ignoreFalseAuthenticated) {
-                    ignoreFalseAuthenticated = false;
-                    break;
-                } else {
-                    $("#authenticated-checkbox").prop("checked", true);
-                    initUiHandlers();
-                }
-            }
+            document.getElementById("inprogress-checkbox").checked = true;
+            document.getElementById("authenticated-checkbox").checked = true;
+            document.getElementById("make-call").onclick = makeCallClick;
+            document.getElementById("end-call").onclick = endCallClick;
             break;
-        case "NotAuthenticated":
-            break;
+        case 'NotAuthenticated':
+            document.getElementById("inprogress-checkbox").checked = false;
+            document.getElementById("authenticated-checkbox").checked = false;
     }
 }
 
-function initUiHandlers() {
-    $("#make-call").click(makeCallClick);
-    $("#end-call").click(function(conversation){
-        if(currentConversation.capabilities.canEnd){
-            currentConversation.end();
-        }
-    });
-    $("#destination").keypress(destinationKeypress);
-}
-
+// Received for any/all minor changes to the device/line list
 function onTelephonyDeviceListChanged() {
-    let devices = cwic.TelephonyController.telephonyDevices;
-    if (devices.length > 0) {
-        device = devices[0]
-        $("#selected-device").val(device.name);
-        let lines = device.lineDirectoryNumbers;
-        if (lines.length > 0) {
-            $("#directory-number").val(device.lineDirectoryNumbers[0]);
+    // If we've already chosen a device, choose its first line appearance
+    if (currentDevice) {
+        for (device of cwic.TelephonyController.telephonyDevices) {
+            if (device.name == currentDevice) {
+                document.getElementById('directory-number').textContent = device.activeLine;
+            };
         }
-        cwic.TelephonyController.addEventHandler("onConnectionStateChanged", onConnectionStateChanged);
-        cwic.TelephonyController.addEventHandler("onConversationOutgoing", function(conversation){
-            currentConversation = conversation;
-        });
-        device.connect(true); // force registration
+    return;
+    }
+    // If not, look for CSF devices and chose the first one
+    for (device of cwic.TelephonyController.telephonyDevices) {
+        if (device.type == 'Cisco Unified Client Services Framework') {
+            currentDevice = device.name;
+            document.getElementById('selected-device').textContent = device.name;
+            // Start the device connect/registration process
+            device.connect(true);
+            break;
+        }
     }
 }
 
 function onConnectionStateChanged(state) {
+    document.getElementById("connection-status").innerText = state;
     switch (state) {
         case "Disconnected":
             {
-                $("#connection-status").html("Disconnected");
-                $("#connection-status").css({
-                    "color": "red"
-                });
-                $("#make-call").prop("disabled", true);
-                $("#end-call").prop("disabled", false);
-    break;
+                document.getElementById("connection-status").style.color = 'red';
+                document.getElementById("make-call").disabled = true;
+                document.getElementById("end-call").disabled = false;
+                document.getElementById('call-status').textContent = '';
+                break;
             }
         case "Connecting":
             {
-                $("#connection-status").html("Connecting...");
-                $("#connection-status").css({
-                    "color": "goldenrod"
-                });
-                $("#make-call").prop("disabled", true);
+                document.getElementById("connection-status").style.color = 'goldenrod';
+                document.getElementById("make-call").disabled = true;
                 break;
             }
         case "Connected":
             {
-                $("#connection-status").html("Connected");
-                $("#connection-status").css({
-                    "color": "green"
-                });
-                $("#make-call").prop("disabled", false);
-                // $("#end-call").prop("disabled", false);
+                document.getElementById("connection-status").style.color = 'green';
+                document.getElementById("make-call").disabled = false;
+                // With the telephony connection established/device registered, we can
+                // instantiate the native video window
                 nativeConversationWindow = cwic.WindowController.getNativeConversationWindow();
+                document.getElementById('call-status').textContent = 'Onhook';
                 break;
             }
     }
 }
 
 function makeCallClick() {
-    $("#make-call").prop("disabled", true);
-    $("#end-call").prop("disabled", false);
-    cwic.TelephonyController.addEventHandler("onConversationStarted", onConversationStarted);
-    cwic.TelephonyController.addEventHandler("onConversationEnded", onConversationEnded);
-    cwic.TelephonyController.startVideoConversation($("#destination").val());
+    document.getElementById("make-call").disabled = true;
+    cwic.TelephonyController.startVideoConversation(document.getElementById("destination").value);
 }
 
-function destinationKeypress(key){
-    if (key.which == 13){
-        $("#make-call").click();
-        return false;
+// If there is a call in progress, and it's in a state compatible with being ended...
+function endCallClick() {
+    if(currentConversation && currentConversation.capabilities.canEnd){
+        currentConversation.end();
     }
+};
+
+function onConversationOutgoing(conversation) {
+    // Keep track of the current conversation, so we can specify it when
+    // the user wants to end it
+    currentConversation = conversation;
+    document.getElementById("end-call").disabled = false;
+    document.getElementById("make-call").disabled = true;
+    document.getElementById('call-status').textContent = 'Ringing';
+    document.getElementById('call-status').style.color = 'goldenrod';
 }
 
 function onConversationStarted(conversation){
-    currentConversation = conversation;
-
-    $("#make-call").prop("disabled", true);
-
+    // Dock the video window so it appears stationary in the page
     nativeConversationWindow.dock( document.getElementById("remote-video-container") );
     nativeConversationWindow.showVideoForConversation(conversation);
+    
+    document.getElementById("end-call").disabled = false;
+    document.getElementById('call-status').textContent = 'Talking';
+    document.getElementById('call-status').style.color = 'green';
 }
 
 function onConversationEnded(conversation){
-    $("#end-call").prop("disabled", true);
-    $("#make-call").prop("disabled", false);
     nativeConversationWindow.hide();
+    
+    document.getElementById("end-call").disabled = true;
+    document.getElementById("make-call").disabled = false;
+    document.getElementById('call-status').textContent = 'Onhook';
+    document.getElementById('call-status').style.color = 'black';
 }

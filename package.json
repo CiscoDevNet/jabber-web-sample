@@ -9,6 +9,6 @@
   "author": "dstaudt@cisco.com",
   "license": "MIT",
   "dependencies": {
-    "http-server": "^0.11.1"
+    "http-server": "^14.1.1"
   }
 }

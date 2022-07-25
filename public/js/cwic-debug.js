@@ -4107,7 +4107,7 @@ var cwic =
 	    var m_ClientID      = cwic.Utilities.generateUniqueId();
 	    var m_Version       = {};
 	    var m_Plugin        = null;
-	    this.cwicVersion = "11.8.2.254458";
+	    this.cwicVersion = "11.8.3.282316";
 	    this.addonVersion = "Unknown";
 	    this.systemRelease = "Unknown";
 	    this.platformOS = "Unknown";
@@ -4363,8 +4363,9 @@ var cwic =
 	    cwic.Logger.info('Initializing Chrome extension.');
 	    var extension;
 	    var extensionScript = document.createElement('script');
-	    var extensionID     = "ppbllmlcmhfnfflbkbinnhacecaankdh";
-	
+	  //  var extensionID     = "ppbllmlcmhfnfflbkbinnhacecaankdh";
+		var extensionID     = "mbhnoblcplfcookpoennihpndjobapeo";
+	  
 	    extensionScript.id      = extensionID;
 	    extensionScript.src     = 'chrome-extension://' + extensionID + '/cwic_plugin.js';
 	    extensionScript.onload  = onExtensionLoaded.bind(this);
@@ -4381,7 +4382,8 @@ var cwic =
 	        this.sendMessage = extension.sendRequest;
 	
 	        var settings = {
-	            cwicExtId: 'ppbllmlcmhfnfflbkbinnhacecaankdh',
+	            //cwicExtId: 'ppbllmlcmhfnfflbkbinnhacecaankdh',
+				cwicExtId: 'mbhnoblcplfcookpoennihpndjobapeo',
 	            verbose: true
 	        };
 	
@@ -4395,7 +4397,8 @@ var cwic =
 	
 	        if(this.onInitializeError)
 	        {
-	            var url = 'https://chrome.google.com/webstore/detail/cisco-web-communicator/ppbllmlcmhfnfflbkbinnhacecaankdh';
+	            //var url = 'https://chrome.google.com/webstore/detail/cisco-web-communicator/ppbllmlcmhfnfflbkbinnhacecaankdh';
+				var url = 'https://chrome.google.com/webstore/detail/cisco-web-communicator/mbhnoblcplfcookpoennihpndjobapeo';
 	
 	            var errorInfo = {
 	                errorType : "ChromeExtension",
@@ -4412,7 +4415,8 @@ var cwic =
 	
 	ChromeExtension.prototype.uninitialize = function()
 	{
-	    var extensionID     = "ppbllmlcmhfnfflbkbinnhacecaankdh";
+	    //var extensionID     = "ppbllmlcmhfnfflbkbinnhacecaankdh";
+		var extensionID     = "mbhnoblcplfcookpoennihpndjobapeo";
 	    var extensionScript = document.getElementById(extensionID);
 	
 	    extensionScript.parentNode.removeChild(extensionScript);
@@ -4802,7 +4806,7 @@ var cwic =
 /* 33 */
 /***/ (function(module, exports) {
 
-	var version = "11.8.2.254458";
+	var version = "11.8.3.282316";
 	
 	function Version(versionString)
 	{
